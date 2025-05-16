@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntFlag
 
 from bitarray import bitarray
 
@@ -10,17 +10,14 @@ PRNG_SEED_KEY_C = bytes.fromhex("01055348 45008000 00000000 000000B0 ")
 PRNG_EXTENSION_C = bytes.fromhex("80000000 00000000 00000000 00000100")
 
 
-class ProtectionFlag(Enum):
-    NONE = bitarray("000000")
-    CMAC_USAGE = bitarray("000001")
-    WILDCARD = bitarray("000010")
-    KEY_USAGE = bitarray("000100")
-    DEBUGGER_PROTECTION = bitarray("001000")
-    BOOT_PROTECTION = bitarray("010000")
-    WRITE_PROTECTION = bitarray("100000")
-
-    def __or__(self, value: "ProtectionFlag") -> "ProtectionFlag":
-        return ProtectionFlag(self.value | value.value)
+class ProtectionFlag(IntFlag):
+    NONE = 0
+    CMAC_USAGE = 2
+    WILDCARD = 4
+    KEY_USAGE = 8
+    DEBUGGER_PROTECTION = 16
+    BOOT_PROTECTION = 32
+    WRITE_PROTECTION = 64
 
 
 class MemorySlot(Enum):

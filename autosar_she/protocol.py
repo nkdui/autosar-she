@@ -21,9 +21,12 @@ def _m2(k_auth_id: bytes, k_id: bytes, c_id: int, f_id: ProtectionFlag) -> bytes
     c_id_ba = bitarray()
     c_id_ba.frombytes(c_id.to_bytes(4))
     c_id_ba = c_id_ba[4:]
+    f_id_ba = bitarray()
+    f_id_ba.frombytes(f_id.value.to_bytes(1))
+    f_id_ba =f_id_ba[2:]
     key_id_ba = bitarray()
     key_id_ba.frombytes(k_id)
-    m2_plain = (c_id_ba + f_id.value + bitarray(94) + key_id_ba).tobytes()
+    m2_plain = (c_id_ba + f_id_ba + bitarray(94) + key_id_ba).tobytes()
     k1 = kdf(k_auth_id, KEY_UPDATE_ENC_C)
     return Cipher(AES128(k1), CBC(bytes(16))).encryptor().update(m2_plain)
 
