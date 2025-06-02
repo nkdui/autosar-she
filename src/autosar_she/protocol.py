@@ -4,8 +4,8 @@ from cryptography.hazmat.primitives.ciphers.algorithms import AES128
 from cryptography.hazmat.primitives.ciphers.modes import CBC, ECB
 from cryptography.hazmat.primitives.cmac import CMAC
 
-from .algo import kdf
-from .types import KEY_UPDATE_ENC_C, KEY_UPDATE_MAC_C, MemorySlot, ProtectionFlag
+from autosar_she.algo import kdf
+from autosar_she.types import KEY_UPDATE_ENC_C, KEY_UPDATE_MAC_C, MemorySlot, ProtectionFlag
 
 
 def _m1(uid: bytes, id_: MemorySlot, auth_id: MemorySlot) -> bytes:
