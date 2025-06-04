@@ -7,6 +7,7 @@ BLOCKSIZE = 16
 
 
 def _aes_mp(data: bytes) -> bytes:
+    """Miyaguchi-Preneel compression function"""
     assert (len(data) % BLOCKSIZE) == 0, "'data' length must divisible by 16 bytes"
 
     block_count = len(data) // BLOCKSIZE
@@ -20,14 +21,12 @@ def _aes_mp(data: bytes) -> bytes:
 
 
 def _padding(data: bytes) -> bytes:
-    if (len(data) % BLOCKSIZE) == 0:
-        return data
+    """AUTOSAR-SHE specific padding"""
     data_ba = bitarray()
     data_ba.frombytes(data)
     l = len(data_ba)
     data_ba += bitarray([1])
     k = 0
-    print(l)
     while ((l + 1 + k) % 128) != 88:
         k += 1
     data_ba += bitarray(k)
@@ -38,4 +37,5 @@ def _padding(data: bytes) -> bytes:
 
 
 def kdf(key: bytes, const: bytes) -> bytes:
+    """AUTOSAR-SHE Key Derive Function"""
     return _aes_mp(_padding(key + const))

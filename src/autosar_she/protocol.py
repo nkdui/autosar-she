@@ -5,7 +5,12 @@ from cryptography.hazmat.primitives.ciphers.modes import CBC, ECB
 from cryptography.hazmat.primitives.cmac import CMAC
 
 from autosar_she.algo import kdf
-from autosar_she.types import KEY_UPDATE_ENC_C, KEY_UPDATE_MAC_C, MemorySlot, ProtectionFlag
+from autosar_she.types import (
+    KEY_UPDATE_ENC_C,
+    KEY_UPDATE_MAC_C,
+    MemorySlot,
+    ProtectionFlag,
+)
 
 
 def _m1(uid: bytes, id_: MemorySlot, auth_id: MemorySlot) -> bytes:
@@ -23,11 +28,12 @@ def _m2(k_auth_id: bytes, k_id: bytes, c_id: int, f_id: ProtectionFlag) -> bytes
     c_id_ba = c_id_ba[4:]
     f_id_ba = bitarray()
     f_id_ba.frombytes(f_id.value.to_bytes(1))
-    f_id_ba =f_id_ba[2:]
+    f_id_ba = f_id_ba[2:]
     key_id_ba = bitarray()
     key_id_ba.frombytes(k_id)
     m2_plain = (c_id_ba + f_id_ba + bitarray(94) + key_id_ba).tobytes()
-    k1 = kdf(k_auth_id, KEY_UPDATE_ENC_C)
+    k1 = kdf(k_auth_id, b"\x01\x01SHE\x00")
+    print(f"k1={k1.hex()}")
     return Cipher(AES128(k1), CBC(bytes(16))).encryptor().update(m2_plain)
 
 
@@ -35,7 +41,8 @@ def _m3(k_auth_id: bytes, m1: bytes, m2: bytes) -> bytes:
     assert len(k_auth_id) == 16, "'k_auth_id' length must be 16 bytes (128 bits)"
     assert len(m1) == 16, "'m1' length must be 16 bytes (128 bits)"
     assert len(m2) == 32, "'m2' length must be 32 bytes (256 bits)"
-    k2 = kdf(k_auth_id, KEY_UPDATE_MAC_C)
+    k2 = kdf(k_auth_id, b"\x01\x02SHE\x00")
+    print(f"k2={k2.hex()}")
     cmac = CMAC(AES128(k2))
     cmac.update(m1 + m2)
     return cmac.finalize()
@@ -49,7 +56,8 @@ def _m4(uid: bytes, auth_id: MemorySlot, id_: MemorySlot, k_id: bytes, c_id: int
     c_id_ba = bitarray()
     c_id_ba.frombytes(c_id.to_bytes(4))
     c_id_ba = c_id_ba[4:]
-    k3 = kdf(k_id, KEY_UPDATE_ENC_C)
+    k3 = kdf(k_id, b"\x01\x01SHE\x00")
+    print(f"k3={k3.hex()}")
     return (uid_ba + id_.value + auth_id.value).tobytes() + Cipher(
         AES128(k3), ECB()
     ).encryptor().update((c_id_ba + bitarray("1" + "0" * 99)).tobytes())
@@ -58,7 +66,8 @@ def _m4(uid: bytes, auth_id: MemorySlot, id_: MemorySlot, k_id: bytes, c_id: int
 def _m5(k_id: bytes, m4: bytes):
     assert len(k_id) == 16, "'k_id' length must be 16 bytes (128 bits)"
     assert len(m4) == 32, "'m4' length must be 32 bytes (256 bits)"
-    k4 = kdf(k_id, KEY_UPDATE_MAC_C)
+    k4 = kdf(k_id, b"\x01\x02SHE\x00")
+    print(f"k4={k4.hex()}")
     cmac = CMAC(AES128(k4))
     cmac.update(m4)
     return cmac.finalize()
