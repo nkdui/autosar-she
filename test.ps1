@@ -1,0 +1,1 @@
+pytest --cov=autosar_she --cov-report html .\test\ -v -s
