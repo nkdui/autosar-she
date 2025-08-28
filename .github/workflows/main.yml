@@ -38,7 +38,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
           ignore-nothing-to-cache: true
-      - run: uv run pytest --cov=autosar_she --cov-fail-under=80 .\test\ -v -s
+      - run: uv run pytest --cov=autosar_she --cov-fail-under=80 ./test -v -s
 
   build:
     needs: [test-pytest]
