@@ -5,9 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-    { name = "Nguyen Khac Duy (MS/ETA-Hub-JP)", email = "Duy.NguyenKhac2@vn.bosch.com" },
+    { name = "Nguyen Khac Duy", email = "nkduy@duck.com" },
 ]
-dependencies = ["bitarray>=3.4.0", "cryptography>=44.0.3"]
+dependencies = ["bitarray>=3.7.0", "cryptography>=44.0.3"]
 
 [tool.uv]
 package = true

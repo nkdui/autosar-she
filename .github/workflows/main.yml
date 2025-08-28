@@ -1,0 +1,57 @@
+name: main
+run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test-pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+          enable-cache: true
+          ignore-nothing-to-cache: true
+      - run: uv run pylint src --fail-under 8
+
+  test-pytest:
+    needs: [test-pylint]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          ignore-nothing-to-cache: true
+      - run: uv run pytest --cov=autosar_she --cov-fail-under=80 .\test\ -v -s
+
+  build:
+    needs: [test-pytest]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+          enable-cache: true
+          ignore-nothing-to-cache: true
+      - run: uv build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: autosar-she
+          path: dist/*
