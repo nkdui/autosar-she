@@ -3,7 +3,7 @@ name = "autosar-she"
 version = "1.0.1"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 authors = [
     { name = "Nguyen Khac Duy", email = "nkduy@duck.com" },
 ]
