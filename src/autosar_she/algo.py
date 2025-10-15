@@ -24,14 +24,14 @@ def _padding(data: bytes) -> bytes:
     """AUTOSAR-SHE specific padding"""
     data_ba = bitarray()
     data_ba.frombytes(data)
-    l = len(data_ba)
+    bit_length = len(data_ba)
     data_ba += bitarray([1])
     k = 0
-    while ((l + 1 + k) % 128) != 88:
+    while ((bit_length + 1 + k) % 128) != 88:
         k += 1
     data_ba += bitarray(k)
     number_ba = bitarray()
-    number_ba.frombytes(l.to_bytes(5))
+    number_ba.frombytes(bit_length.to_bytes(5))
     data_ba += number_ba
     return data_ba.tobytes()
 

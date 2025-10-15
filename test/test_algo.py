@@ -1,6 +1,6 @@
 import random
 
-from autosar_she.algo import _padding, _aes_mp, kdf
+from autosar_she.algo import _aes_mp, _padding, kdf
 
 
 def test_padding_0_bytes():
