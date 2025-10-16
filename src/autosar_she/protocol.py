@@ -1,3 +1,5 @@
+"""MemoryUpdate protocol"""
+
 from bitarray import bitarray
 from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.primitives.ciphers.algorithms import AES128
@@ -73,6 +75,7 @@ def memory_update(
     c_id: int,
     f_id: ProtectionFlag,
 ):
+    """MemoryUpdate protocol"""
     assert len(uid) == 15, "'uid' length must be 15 bytes (120 bits)"
     assert len(k_auth_id) == 16, "'k_auth_id' length must be 16 bytes (128 bits)"
     assert len(k_id) == 16, "'k_id' length must be 16 bytes (128 bits)"

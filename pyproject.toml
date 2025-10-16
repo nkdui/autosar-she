@@ -1,6 +1,6 @@
 [project]
 name = "autosar-she"
-version = "1.0.2"
+version = "1.0.3"
 description = "Implementation of AUTOSAR-SHE MemoryUpdate protocol in Python"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -15,4 +15,4 @@ dev = ["mypy>=1.18.2", "pylint>=4.0.1", "pytest-cov>=7.0.0", "ruff>=0.14.0"]
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
-addopts = "--cov=autosar_she --cov-report html -v -s"
+addopts = "--cov=autosar_she --cov-fail-under=90 --cov-report=html -v -s"

@@ -1,3 +1,5 @@
+"""An implementation of AUTOSAR-SHE MemoryUpdate protocol"""
+
 from autosar_she.protocol import memory_update
 from autosar_she.types import MemorySlot, ProtectionFlag
 

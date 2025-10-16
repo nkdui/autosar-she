@@ -1,3 +1,5 @@
+"""Common types use in MemoryUpdate protocol"""
+
 from enum import Enum, IntFlag
 
 from bitarray import bitarray
@@ -11,6 +13,7 @@ PRNG_EXTENSION_C = bytes.fromhex("80000000 00000000 00000000 00000100")
 
 
 class ProtectionFlag(IntFlag):
+    """Protection flags"""
     NONE = 0b000000
     CMAC_USAGE = 0b0000001
     WILDCARD = 0b000010
@@ -21,6 +24,7 @@ class ProtectionFlag(IntFlag):
 
 
 class MemorySlot(Enum):
+    """Memory slots selection"""
     SECRET_KEY = bitarray("0000")
     MASTER_ECU_KEY = bitarray("0001")
     BOOT_MAC_KEY = bitarray("0010")

@@ -13,7 +13,7 @@ on:
       - main
 
 jobs:
-  test-pylint:
+  static-analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,10 +25,14 @@ jobs:
           enable-cache: true
           ignore-nothing-to-cache: true
       - name: Run Pylint
-        run: uv run pylint src --fail-under 8
+        run: uv run pylint src --fail-under 9
+      - name: Run Ruff
+        run: uv run ruff check
+      - name: Run Mypy
+        run: uv run mypy src
 
-  test-pytest:
-    needs: [test-pylint]
+  test:
+    needs: [static-analysis]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,10 +47,10 @@ jobs:
           enable-cache: true
           ignore-nothing-to-cache: true
       - name: Run Pytest
-        run: uv run pytest --cov=autosar_she --cov-fail-under=80 ./test -v -s
+        run: uv run pytest
 
   build:
-    needs: [test-pytest]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

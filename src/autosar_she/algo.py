@@ -1,3 +1,5 @@
+"""Common algorithms use in MemoryUpdate protocol"""
+
 from bitarray import bitarray
 from cryptography.hazmat.primitives.ciphers.algorithms import AES128
 from cryptography.hazmat.primitives.ciphers.base import Cipher
