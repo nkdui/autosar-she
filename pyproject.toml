@@ -1,6 +1,6 @@
 [project]
 name = "autosar-she"
-version = "1.0.3"
+version = "1.0.4"
 description = "Implementation of AUTOSAR-SHE MemoryUpdate protocol in Python"
 readme = "README.md"
 requires-python = ">=3.11"
